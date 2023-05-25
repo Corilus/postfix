@@ -15,97 +15,13 @@ RUN apk update \
         ca-certificates \
  && update-ca-certificates \
     \
- # Install Postfix dependencies
+ # Install Postfix dependencies & Postfix
  && apk add --no-cache \
-        pcre icu-libs \
-        db libpq mariadb-client sqlite-libs \
-        libsasl \
-        libldap \
-    \
- # Install tools for building
- && apk add --no-cache --virtual .tool-deps \
-        curl coreutils autoconf g++ libtool make libressl patch \
-    \
- # Install Postfix build dependencies
- && apk add --no-cache --virtual .build-deps \
-        openssl \
-        openssl-dev \
-        linux-headers \
-        pcre-dev icu-dev \
-        db-dev postgresql-dev mariadb-dev sqlite-dev \
-        cyrus-sasl-dev \
-        openldap-dev \
-    \
- # Download and prepare Postfix sources
- && curl -fL -o /tmp/postfix.tar.gz \
-         http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/postfix-3.5.8.tar.gz \
- && (echo "0abb07d99e343b76e6a26b4a090af9d592f4dfd03c8c737cc72bfb0f4267dafcbb0cb0aa7b6255f8b834c9289d89a5c47b167be3758239309937cb77e0d9464b  /tmp/postfix.tar.gz" \
-         | sha512sum -c -) \
- && tar -xzf /tmp/postfix.tar.gz -C /tmp/ \
- && cd /tmp/postfix-* \
- && curl -fL -o ./postfix-install.patch \
-         https://git.alpinelinux.org/cgit/aports/plain/main/postfix/postfix-install.patch?h=2b1512eefca296b0ef1b60d2e521349385a3c353 \
- && patch -p1 -i ./postfix-install.patch \
- && sed -i -e "s|#define HAS_NIS|//#define HAS_NIS|g" \
-           -e "/^#define ALIAS_DB_MAP/s|:/etc/aliases|:/etc/postfix/aliases|" \
-        src/util/sys_defs.h \
- && sed -i -e "s:/usr/local/:/usr/:g" conf/master.cf \
-    \
- # Build Postfix from sources
- && make makefiles \
-         CCARGS="-DHAS_SHL_LOAD -DUSE_TLS \
-                 -DHAS_PCRE $(pkg-config --cflags libpcre) \
-                 -DHAS_PGSQL $(pkg-config --cflags libpq) \
-                 -DHAS_MYSQL $(mysql_config --include) \
-                 -DHAS_SQLITE $(pkg-config --cflags sqlite3) \
-                 -DHAS_LDAP \
-                 -DUSE_CYRUS_SASL -I/usr/include/sasl \
-                 -DUSE_SASL_AUTH -DDEF_SASL_SERVER=\\\"dovecot\\\" \
-                 -DUSE_LDAP_SASL" \
-         AUXLIBS="-lssl -lcrypto -lsasl2" \
-         AUXLIBS_PCRE="$(pkg-config --libs libpcre)" \
-         AUXLIBS_PGSQL="$(pkg-config --libs libpq)" \
-         AUXLIBS_MYSQL="$(mysql_config --libs)" \
-         AUXLIBS_SQLITE="$(pkg-config --libs sqlite3)" \
-         AUXLIBS_LDAP="-lldap -llber" \
-         shared=yes \
-         dynamicmaps=yes \
-         pie=yes \
-         daemon_directory=/usr/lib/postfix \
-         shlibs_directory=/usr/lib/postfix \
-         # No documentation included to keep image size smaller
-         manpage_directory=/tmp/man \
-         readme_directory=/tmp/readme \
-         html_directory=/tmp/html \
- && make \
-    \
- # Create Postfix user and groups
- && addgroup -S -g 91 postfix \
- && adduser -S -u 90 -D \
-            -H -h /var/spool/postfix \
-            -G postfix -g postfix \
-            postfix \
- && addgroup postfix mail \
- && addgroup -S -g 93 postdrop \
- && adduser -S -u 92 -D -s /sbin/nologin \
-            -H -h /var/mail/domains \
-            -G postdrop -g vmail \
-            vmail \
-    \
- # Install Postfix
- && make upgrade \
- # Always execute these binaries under postdrop group
- && chmod g+s /usr/sbin/postdrop \
-              /usr/sbin/postqueue \
- # Ensure spool dir has correct rights
- && install -d -o postfix -g postfix /var/spool/postfix \
- # Fix removed directories in default configuration
- && sed -i -e 's,^manpage_directory =.*,manpage_directory = /dev/null,' \
-           -e 's,^readme_directory =.*,readme_directory = /dev/null,' \
-           -e 's,^html_directory =.*,html_directory = /dev/null,' \
-        /etc/postfix/main.cf \
+        openssl postfix
+
+
  # Prepare directories for drop-in configuration files
- && install -d /etc/postfix/main.cf.d \
+RUN install -d /etc/postfix/main.cf.d \
  && install -d /etc/postfix/master.cf.d \
  # Generate default TLS credentials
  && install -d /etc/ssl/postfix \
@@ -141,7 +57,6 @@ RUN apk update \
     " >> /etc/postfix/main.cf \
     \
  # Cleanup unnecessary stuff
- && apk del .tool-deps .build-deps \
  && rm -rf /var/cache/apk/* \
            /tmp/*
 
