@@ -11,7 +11,7 @@ RUN apk update \
 
 # Install Postfix & Postfix dependencies
 RUN apk add --no-cache \
-        postfix openssl libldap mariadb-client pcre sqlite-libs
+        postfix openssl libldap mariadb-client postfix-pcre sqlite-libs
 
 # Install s6-overlay
 RUN apk add --no-cache s6-overlay
