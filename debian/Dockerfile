@@ -9,6 +9,13 @@ RUN apt-get update \
 
 RUN apt-get install -y postfix
 
+COPY rootfs /
+
+RUN chmod +x /etc/services.d/*/run \
+             /etc/cont-init.d/*
+
 EXPOSE 25 465 587
+
+ENTRYPOINT ["/init"]
 
 CMD ["/usr/libexec/postfix/master", "-d"]
