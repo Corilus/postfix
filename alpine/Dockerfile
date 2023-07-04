@@ -7,7 +7,7 @@ RUN apk update \
  && apk upgrade \
  && apk add --no-cache \
         ca-certificates \
- && update-ca-certificates \
+ && update-ca-certificates
 
 # Install Postfix & Postfix dependencies
 RUN apk add --no-cache \
@@ -25,4 +25,4 @@ EXPOSE 25 465 587
 
 ENTRYPOINT ["/init"]
 
-CMD ["/usr/libexec/postfix/master", "-d"]
+CMD ["/bin/sh"]
