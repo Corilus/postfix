@@ -12,7 +12,7 @@ RUN apk update \
  && apk add --no-cache \
         openssl postfix
 
-COPY rootfs /etc
+COPY alpine/rootfs /etc
 
 RUN chmod +x /etc/services.d/*/run \
              /etc/cont-init.d/*
