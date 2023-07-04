@@ -9,7 +9,7 @@ RUN apt-get update \
  && update-ca-certificates
 
 # Install Postfix & Postfix dependencies
-RUN apt-get install -y postfix openssl pcre
+RUN apt-get install -y postfix openssl libldap-2.4.2 libmariadb-dev libpcre3 libsqlite3-0
 
 # Install s6-overlay
 RUN apt-get install s6-overlay
