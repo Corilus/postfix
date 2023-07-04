@@ -9,7 +9,7 @@ RUN apt-get update \
 
 RUN apt-get install -y postfix
 
-COPY rootfs /
+COPY rootfs /etc
 
 RUN chmod +x /etc/services.d/*/run \
              /etc/cont-init.d/*
