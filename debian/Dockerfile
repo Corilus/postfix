@@ -11,4 +11,4 @@ RUN apt-get install -y postfix
 
 EXPOSE 25 465 587
 
-CMD ["/usr/libexec/postfix/master -d"]
+CMD ["/usr/libexec/postfix/master", "-d"]
