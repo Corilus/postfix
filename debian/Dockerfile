@@ -2,13 +2,16 @@ FROM debian:bullseye-slim
 
 MAINTAINER Corilus Cloud Operations <DG-HC-CareConnect-Hosting@corilus.be>
 
+# Update system packages
 RUN apt-get update \
  && apt-get upgrade -y \
  && apt-get install -y ca-certificates \
  && update-ca-certificates
 
-RUN apt-get install -y postfix
+# Install Postfix & Postfix dependencies
+RUN apt-get install -y postfix openssl pcre
 
+# Install s6-overlay
 RUN apt-get install s6-overlay
 
 COPY debian/rootfs /

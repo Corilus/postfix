@@ -2,16 +2,16 @@ FROM alpine:3.18
 
 MAINTAINER Corilus Cloud Operations <DG-HC-CareConnect-Hosting@corilus.be>
 
-# Update system packages & install postfix
+# Update system packages
 RUN apk update \
  && apk upgrade \
  && apk add --no-cache \
         ca-certificates \
  && update-ca-certificates \
-    \
- # Install Postfix dependencies & Postfix
- && apk add --no-cache \
-        openssl postfix
+
+# Install Postfix & Postfix dependencies
+RUN apk add --no-cache \
+        postfix openssl pcre
 
 # Install s6-overlay
 RUN apk add --no-cache s6-overlay
