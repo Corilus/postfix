@@ -19,6 +19,6 @@ RUN chmod +x /etc/services.d/*/run \
 
 EXPOSE 25 465 587
 
-ENTRYPOINT ["/init"]
+ENTRYPOINT ["/init.sh"]
 
 CMD ["/usr/libexec/postfix/master", "-d"]
