@@ -25,4 +25,4 @@ EXPOSE 25 465 587
 
 ENTRYPOINT ["/init"]
 
-CMD ["/bin/sh"]
+CMD ["/usr/libexec/postfix/master", "-d"]
