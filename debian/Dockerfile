@@ -9,6 +9,8 @@ RUN apt-get update \
 
 RUN apt-get install -y postfix
 
+RUN apt-get install s6-overlay
+
 COPY debian/rootfs /
 
 RUN chmod +x /etc/services.d/*/run \
@@ -16,6 +18,6 @@ RUN chmod +x /etc/services.d/*/run \
 
 EXPOSE 25 465 587
 
-ENTRYPOINT ["/init.sh"]
+ENTRYPOINT ["/init"]
 
 CMD ["/usr/libexec/postfix/master", "-d"]
