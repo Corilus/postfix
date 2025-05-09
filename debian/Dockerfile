@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:stable-slim
 
 MAINTAINER Corilus Cloud Operations <DG-HC-CareConnect-Hosting@corilus.be>
 
