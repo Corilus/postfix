@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:latest
 
 MAINTAINER Corilus Cloud Operations <DG-HC-CareConnect-Hosting@corilus.be>
 
