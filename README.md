@@ -1,10 +1,7 @@
 Postfix Docker Image
 ====================
 
-[![Build Status](https://travis-ci.org/instrumentisto/postfix-docker-image.svg?branch=master)](https://travis-ci.org/instrumentisto/postfix-docker-image) [![Docker Pulls](https://img.shields.io/docker/pulls/instrumentisto/postfix.svg)](https://hub.docker.com/r/instrumentisto/postfix) [![Uses](https://img.shields.io/badge/uses-s6--overlay-blue.svg)][21]
-
-
-
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Corilus/postfix/build.yml?logo=github)](https://github.com/Corilus/postfix/actions/workflows/build.yml) ![GitHub stars](https://img.shields.io/github/stars/Corilus/postfix?logo=github) ![Docker Stars](https://img.shields.io/docker/stars/corilus/postfix?label=stars&logo=docker) [![Docker Pulls](https://img.shields.io/docker/pulls/corilus/postfix?label=pulls&logo=docker)](https://hub.docker.com/r/corilus/postfix)
 
 ## Supported tags and respective `Dockerfile` links
 
